@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block title %}Kasse - Minikasse System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card card-custom mb-4">
+            <div class="card-header bg-primary text-white">
+                <h4 class="card-title mb-0">
+                    <i class="fas fa-shopping-cart me-2"></i>Salg af Varer
+                </h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="row align-items-end">
+                        <div class="col-md-8">
+                            <label class="form-label fw-bold">Vælg vare:</label>
+                            <select name="item" class="form-select form-control-custom" required>
+                                <option value="">-- Vælg en vare --</option>
+                                {% for item, info in inventory.items() %}
+                                {% if info.stock > 0 %}
+                                <option value="{{ item }}">
+                                    {{ item }} - {{ info.price }} kr ({{ info.stock }} stk tilbage)
+                                </option>
+                                {% else %}
+                                <option value="{{ item }}" disabled>
+                                    {{ item }} - {{ info.price }} kr (UDSOLGT)
+                                </option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-success-custom btn-custom w-100">
+                                <i class="fas fa-cash-register me-2"></i>Sælg Vare
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Inventory Overview -->
+        <div class="card card-custom mb-4">
+            <div class="card-header bg-info text-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-boxes me-2"></i>Lageroversigt
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    {% for item, info in inventory.items() %}
+                    <div class="col-md-4 mb-3">
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body text-center">
+                                <h6 class="card-title fw-bold">{{ item }}</h6>
+                                <p class="card-text">
+                                    <span class="badge bg-primary rounded-pill">{{ info.price }} kr</span><br>
+                                    <small class="text-muted mt-1">
+                                        {% if info.stock > 0 %}
+                                        <i class="fas fa-check-circle text-success"></i> {{ info.stock }} stk
+                                        {% else %}
+                                        <i class="fas fa-times-circle text-danger"></i> Udsolgt
+                                        {% endif %}
+                                    </small>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <!-- Undo Sale -->
+        <div class="card card-custom mb-4">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-undo me-2"></i>Fortryd Salg
+                </h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Fortryd dit sidste salg inden for 30 sekunder</p>
+                <form method="POST" action="{{ url_for('undo_sale') }}">
+                    <button type="submit" class="btn btn-danger-custom btn-custom w-100">
+                        <i class="fas fa-undo me-2"></i>Fortryd Sidste Salg
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Recent Sales -->
+        <div class="card card-custom">
+            <div class="card-header bg-secondary text-white">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-history me-2"></i>Seneste Salg
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if sales %}
+                <div class="list-group list-group-flush">
+                    {% for sale in sales %}
+                    <div class="list-group-item border-0 px-0">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">{{ sale.item }}</h6>
+                                <small class="text-muted">af {{ sale.cashier }}</small>
+                            </div>
+                            <span class="badge bg-success rounded-pill">{{ sale.price }} kr</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-muted text-center mb-0">
+                    <i class="fas fa-info-circle me-2"></i>Ingen salg endnu
+                </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

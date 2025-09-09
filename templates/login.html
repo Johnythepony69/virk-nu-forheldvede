@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Minikasse System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4">
+        <div class="card card-custom mt-5">
+            <div class="card-body p-4">
+                <div class="text-center mb-4">
+                    <i class="fas fa-cash-register fa-3x text-primary mb-3"></i>
+                    <h2 class="card-title fw-bold">Minikasse System</h2>
+                    <p class="text-muted">Log ind for at fortsætte</p>
+                </div>
+                
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">
+                            <i class="fas fa-user me-2"></i>Brugernavn
+                        </label>
+                        <input type="text" name="username" class="form-control form-control-custom" placeholder="Indtast brugernavn" required>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">
+                            <i class="fas fa-lock me-2"></i>Adgangskode
+                        </label>
+                        <input type="password" name="password" class="form-control form-control-custom" placeholder="Indtast adgangskode" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary-custom btn-custom w-100">
+                        <i class="fas fa-sign-in-alt me-2"></i>Log ind
+                    </button>
+                </form>
+                
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
